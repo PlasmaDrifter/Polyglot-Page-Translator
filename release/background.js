@@ -30,6 +30,7 @@ const DEFAULT_SETTINGS = {
   deeplApiUrl: 'https://api-free.deepl.com',
   showLanguageBadges: true,
   showOriginalOnHover: true,
+  autoTranslateAllPages: false,
   autoTranslateDomains: []
 };
 

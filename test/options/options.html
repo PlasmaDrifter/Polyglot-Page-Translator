@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Polyglot Page Translator Settings (Test)</title>
+  <title>Polyglot Page Translator Settings</title>
   <link rel="stylesheet" href="options.css">
 </head>
 <body>
   <div class="settings-container">
     <header class="header">
       <div class="brand">
-        <h1 class="brand-title">Polyglot Page Translator Settings (Test)</h1>
+        <h1 class="brand-title">Polyglot Page Translator Settings</h1>
       </div>
     </header>
 
@@ -79,12 +79,29 @@
         </div>
       </section>
 
-      <!-- Managed Auto-Translate Domains -->
+      <!-- Managed Auto-Translate Domains & Global Setting -->
       <section class="card">
-        <h2 class="card-title">Auto-Translate Domains</h2>
-        <p class="field-hint">Domains where translation activates automatically on page visit.</p>
+        <h2 class="card-title">Automatic Translation</h2>
+        
+        <div class="field-group" style="margin-bottom: 16px;">
+          <label class="toggle-control-label" for="chk-auto-all">
+            <input type="checkbox" id="chk-auto-all">
+            <span>Automatically translate all webpages</span>
+          </label>
+          <p class="field-hint">When enabled, any page you visit will be translated automatically without having to click the button.</p>
+        </div>
+
+        <h3 class="card-subtitle" style="font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-primary);">Always-Translate Domain List</h3>
+        <p class="field-hint" style="margin-bottom: 10px;">Specific websites where translation activates automatically (e.g. reddit.com, wikipedia.org).</p>
+
+        <!-- Add domain form -->
+        <div class="add-domain-row" style="display: flex; gap: 8px; margin-bottom: 12px;">
+          <input type="text" id="new-domain-input" class="form-control" placeholder="example.com or sub.domain.org" style="flex: 1;">
+          <button type="button" id="btn-add-domain" class="btn btn-secondary" style="white-space: nowrap;">Add Website</button>
+        </div>
+
         <div id="domains-list" class="domains-list">
-          <div class="domains-empty">No domains configured. You can toggle auto-translation from the extension popup.</div>
+          <div class="domains-empty">No domains configured. You can add websites above or toggle from the popup.</div>
         </div>
       </section>
 

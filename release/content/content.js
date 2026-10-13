@@ -638,11 +638,17 @@
 
   // Check for auto-translate on initial page load
   chrome.runtime.sendMessage({ action: 'GET_SETTINGS' }).then((response) => {
-    if (response && response.settings && response.settings.autoTranslateDomains) {
+    if (response && response.settings) {
+      const { autoTranslateAllPages, autoTranslateDomains, targetLang, displayMode } = response.settings;
       const currentHost = window.location.hostname;
-      if (response.settings.autoTranslateDomains.includes(currentHost)) {
+      const shouldAutoTranslate = Boolean(
+        autoTranslateAllPages || 
+        (autoTranslateDomains && autoTranslateDomains.includes(currentHost))
+      );
+
+      if (shouldAutoTranslate) {
         setTimeout(() => {
-          translatePage(response.settings.targetLang, response.settings.displayMode);
+          translatePage(targetLang, displayMode);
         }, 800);
       }
     }

@@ -12,7 +12,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const deeplUrl = document.getElementById('deepl-url');
   const defaultLangSelect = document.getElementById('default-lang-select');
   const defaultModeSelect = document.getElementById('default-mode-select');
-  const concurrencyInput = document.getElementById('concurrency-input');
+  const chkAutoAll = document.getElementById('chk-auto-all');
+  const newDomainInput = document.getElementById('new-domain-input');
+  const btnAddDomain = document.getElementById('btn-add-domain');
   const domainsList = document.getElementById('domains-list');
   const btnSave = document.getElementById('btn-save');
   const saveStatus = document.getElementById('save-status');
@@ -42,7 +44,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (domains.length === 0) {
       const emptyDiv = document.createElement('div');
       emptyDiv.className = 'domains-empty';
-      emptyDiv.textContent = 'No domains configured. You can toggle auto-translation from the extension popup on any site.';
+      emptyDiv.textContent = 'No domains configured. You can add websites above or toggle from the popup.';
       domainsList.appendChild(emptyDiv);
       return;
     }
@@ -71,6 +73,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
+  // Add domain handler
+  function handleAddDomain() {
+    let val = newDomainInput.value.trim().toLowerCase();
+    if (!val) return;
+
+    // Clean protocol or path if user pasted a full URL
+    val = val.replace(/^[a-zA-Z]+:\/\//, '').replace(/\/.*$/, '').trim();
+    if (!val) return;
+
+    if (!currentSettings.autoTranslateDomains) {
+      currentSettings.autoTranslateDomains = [];
+    }
+
+    if (!currentSettings.autoTranslateDomains.includes(val)) {
+      currentSettings.autoTranslateDomains.push(val);
+      renderDomains(currentSettings.autoTranslateDomains);
+      newDomainInput.value = '';
+      saveCurrentSettings();
+    } else {
+      newDomainInput.value = '';
+    }
+  }
+
+  btnAddDomain.addEventListener('click', handleAddDomain);
+  newDomainInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleAddDomain();
+    }
+  });
+
   // Load existing settings
   try {
     const response = await chrome.runtime.sendMessage({ action: 'GET_SETTINGS' });
@@ -84,6 +117,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     defaultLangSelect.value = currentSettings.targetLang || 'en';
     defaultModeSelect.value = currentSettings.displayMode || 'replace';
     concurrencyInput.value = currentSettings.concurrencyLimit || 6;
+    chkAutoAll.checked = Boolean(currentSettings.autoTranslateAllPages);
 
     updateProviderVisibility();
     renderDomains(currentSettings.autoTranslateDomains || []);
@@ -101,6 +135,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       targetLang: defaultLangSelect.value,
       displayMode: defaultModeSelect.value,
       concurrencyLimit: parseInt(concurrencyInput.value, 10) || 6,
+      autoTranslateAllPages: chkAutoAll.checked,
       autoTranslateDomains: currentSettings.autoTranslateDomains || []
     };
 
