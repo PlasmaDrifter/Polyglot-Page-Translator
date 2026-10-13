@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const deeplUrl = document.getElementById('deepl-url');
   const defaultLangSelect = document.getElementById('default-lang-select');
   const defaultModeSelect = document.getElementById('default-mode-select');
+  const concurrencyInput = document.getElementById('concurrency-input');
   const chkAutoAll = document.getElementById('chk-auto-all');
   const newDomainInput = document.getElementById('new-domain-input');
   const btnAddDomain = document.getElementById('btn-add-domain');
@@ -74,7 +75,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // Add domain handler
-  function handleAddDomain() {
+  async function handleAddDomain() {
     let val = newDomainInput.value.trim().toLowerCase();
     if (!val) return;
 
@@ -82,15 +83,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     val = val.replace(/^[a-zA-Z]+:\/\//, '').replace(/\/.*$/, '').trim();
     if (!val) return;
 
-    if (!currentSettings.autoTranslateDomains) {
-      currentSettings.autoTranslateDomains = [];
-    }
+    // Fetch freshest settings directly to avoid clobbering
+    const res = await chrome.runtime.sendMessage({ action: 'GET_SETTINGS' });
+    const freshSettings = (res && res.settings) || currentSettings;
+    const domains = freshSettings.autoTranslateDomains ? [...freshSettings.autoTranslateDomains] : [];
 
-    if (!currentSettings.autoTranslateDomains.includes(val)) {
-      currentSettings.autoTranslateDomains.push(val);
-      renderDomains(currentSettings.autoTranslateDomains);
+    if (!domains.includes(val)) {
+      domains.push(val);
+      currentSettings.autoTranslateDomains = domains;
+      renderDomains(domains);
       newDomainInput.value = '';
-      saveCurrentSettings();
+      await saveCurrentSettings();
     } else {
       newDomainInput.value = '';
     }
@@ -104,28 +107,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // Load existing settings
-  try {
-    const response = await chrome.runtime.sendMessage({ action: 'GET_SETTINGS' });
-    currentSettings = (response && response.settings) || {};
+  // Render domains directly from storage
+  async function loadAndRenderSettings() {
+    try {
+      const response = await chrome.runtime.sendMessage({ action: 'GET_SETTINGS' });
+      currentSettings = (response && response.settings) || {};
 
-    providerSelect.value = currentSettings.provider || 'google';
-    libreUrl.value = currentSettings.libreTranslateUrl || 'https://translate.argosopentech.com';
-    libreKey.value = currentSettings.libreTranslateApiKey || '';
-    deeplKey.value = currentSettings.deeplApiKey || '';
-    deeplUrl.value = currentSettings.deeplApiUrl || 'https://api-free.deepl.com';
-    defaultLangSelect.value = currentSettings.targetLang || 'en';
-    defaultModeSelect.value = currentSettings.displayMode || 'replace';
-    concurrencyInput.value = currentSettings.concurrencyLimit || 6;
-    chkAutoAll.checked = Boolean(currentSettings.autoTranslateAllPages);
+      providerSelect.value = currentSettings.provider || 'google';
+      libreUrl.value = currentSettings.libreTranslateUrl || 'https://translate.argosopentech.com';
+      libreKey.value = currentSettings.libreTranslateApiKey || '';
+      deeplKey.value = currentSettings.deeplApiKey || '';
+      deeplUrl.value = currentSettings.deeplApiUrl || 'https://api-free.deepl.com';
+      defaultLangSelect.value = currentSettings.targetLang || 'en';
+      defaultModeSelect.value = currentSettings.displayMode || 'replace';
+      concurrencyInput.value = currentSettings.concurrencyLimit || 6;
+      chkAutoAll.checked = Boolean(currentSettings.autoTranslateAllPages);
 
-    updateProviderVisibility();
-    renderDomains(currentSettings.autoTranslateDomains || []);
-  } catch (err) {
-    console.error('Failed to load settings:', err);
+      updateProviderVisibility();
+      renderDomains(currentSettings.autoTranslateDomains || []);
+    } catch (err) {
+      console.error('Failed to load settings:', err);
+    }
   }
 
+  await loadAndRenderSettings();
+
   async function saveCurrentSettings() {
+    // Refresh latest domains from storage before saving full form
+    const latestRes = await chrome.runtime.sendMessage({ action: 'GET_SETTINGS' });
+    const latestSettings = (latestRes && latestRes.settings) || {};
+    const domainsToSave = currentSettings.autoTranslateDomains || latestSettings.autoTranslateDomains || [];
+
     const newSettings = {
       provider: providerSelect.value,
       libreTranslateUrl: libreUrl.value.trim(),
@@ -136,7 +148,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       displayMode: defaultModeSelect.value,
       concurrencyLimit: parseInt(concurrencyInput.value, 10) || 6,
       autoTranslateAllPages: chkAutoAll.checked,
-      autoTranslateDomains: currentSettings.autoTranslateDomains || []
+      autoTranslateDomains: domainsToSave
     };
 
     const res = await chrome.runtime.sendMessage({
@@ -145,6 +157,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     if (res && res.success) {
+      currentSettings = res.settings;
+      renderDomains(currentSettings.autoTranslateDomains || []);
       saveStatus.textContent = 'Settings saved successfully.';
       setTimeout(() => {
         saveStatus.textContent = '';
@@ -153,4 +167,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   btnSave.addEventListener('click', saveCurrentSettings);
+
+  // Live-sync when options page is open and popup toggles a domain
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === 'local' && changes.settings && changes.settings.newValue) {
+      const updated = changes.settings.newValue;
+      currentSettings.autoTranslateDomains = updated.autoTranslateDomains || [];
+      currentSettings.autoTranslateAllPages = Boolean(updated.autoTranslateAllPages);
+      chkAutoAll.checked = currentSettings.autoTranslateAllPages;
+      renderDomains(currentSettings.autoTranslateDomains);
+    }
+  });
 });

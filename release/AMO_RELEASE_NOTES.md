@@ -1,9 +1,11 @@
-# Polyglot Page Translator v0.3.1 - AMO Notes
+# Polyglot Page Translator v0.3.2 - AMO Notes
 
-What's New in Version 0.3.1:
+What's New in Version 0.3.2:
 
-- Automatic Translation Options:
+- Automatic Translation Options & Domain List:
   Added a master toggle to automatically translate all webpages on load, as well as an interactive website list editor in Options to easily add and remove specific domains.
+- Options Page Aesthetic & Favicon:
+  Added favicon to the settings tab and updated header branding with extension icon and clear labeling. Fixed an options initialization issue to ensure configured domain lists render reliably on every visit.
 
 - Strict Script & Internal Asset Isolation:
   Completely blocks modern SPA inline `<script>` tags, template loaders, and framework module scripts (such as Reddit's internal `SML.load` lazy-bundle loaders) from being parsed or injected into the page as text.
