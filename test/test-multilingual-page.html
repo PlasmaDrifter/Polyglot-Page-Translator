@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polyglot Multilingual Test Page (Test Environment)</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      max-width: 820px;
+      margin: 40px auto;
+      padding: 0 20px;
+      line-height: 1.6;
+      color: #1e293b;
+      background: #f8fafc;
+    }
+    header {
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+    h1 { margin-bottom: 6px; font-size: 26px; }
+    .subtitle { color: #64748b; font-size: 14px; }
+    .badge-bar {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #475569;
+    }
+    .comment-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      transition: transform 0.15s ease;
+    }
+    .author-bar {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 8px;
+    }
+    .lang-hint {
+      color: #64748b;
+      font-weight: 500;
+      font-size: 12px;
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    pre {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 12px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+    code { font-family: monospace; }
+    .btn-action {
+      display: inline-block;
+      padding: 10px 18px;
+      background-color: #2563eb;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      margin: 16px 0 24px 0;
+      transition: background-color 0.15s ease;
+    }
+    .btn-action:hover {
+      background-color: #1d4ed8;
+    }
+    .info-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #1e40af;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>International Developer Forum</h1>
+    <p class="subtitle">A realistic test page containing posts and comments written in multiple different languages simultaneously.</p>
+    <div class="badge-bar">
+      <span class="badge">English</span>
+      <span class="badge">Spanish</span>
+      <span class="badge">French</span>
+      <span class="badge">German</span>
+      <span class="badge">Japanese</span>
+      <span class="badge">Russian</span>
+    </div>
+  </header>
+
+  <div class="info-box">
+    <strong>Testing Instructions:</strong> Click the <strong>Polyglot Page Translator</strong> extension icon in your toolbar, choose your target language (e.g. English) and display mode, then click <strong>Translate Page</strong>. Notice how every comment is translated independently while English posts and code snippets remain intact.
+  </div>
+
+  <main id="comments-container">
+    <!-- Post Description (English) -->
+    <article class="comment-card">
+      <div class="author-bar">
+        <span>Original Question by Alice</span>
+        <span class="lang-hint">Original: English</span>
+      </div>
+      <p>Welcome to our international community! What is your favorite programming language and why? Please feel free to answer in your native language so everyone can share their perspectives.</p>
+    </article>
+
+    <!-- Spanish Comment -->
+    <article class="comment-card">
+      <div class="author-bar">
+        <span>Carlos (Madrid)</span>
+        <span class="lang-hint">Original: Spanish</span>
+      </div>
+      <p>Mi lenguaje favorito sin duda es Python. Su sintaxis limpia y su enorme ecosistema para ciencia de datos y aprendizaje automático hacen que el desarrollo sea muy rápido y agradable. Recomiendo a todos aprenderlo.</p>
+    </article>
+
+    <!-- French Comment -->
+    <article class="comment-card">
+      <div class="author-bar">
+        <span>Élise (Lyon)</span>
+        <span class="lang-hint">Original: French</span>
+      </div>
+      <p>J'utilise Rust pour tous mes projets système. La sécurité de la mémoire sans ramasse-miettes est une véritable révolution technologique. Bien que la courbe d'apprentissage soit difficile, le résultat en vaut vraiment la peine.</p>
+    </article>
+
+    <!-- German Comment -->
+    <article class="comment-card">
+      <div class="author-bar">
+        <span>Maximilian (Berlin)</span>
+        <span class="lang-hint">Original: German</span>
+      </div>
+      <p>Ich bevorzuge TypeScript für die moderne Webentwicklung. Durch die statische Typisierung werden viele Fehler bereits während der Kompilierung erkannt, was die Wartbarkeit großer Anwendungen erheblich verbessert.</p>
+    </article>
+
+    <!-- Japanese Comment -->
+    <article class="comment-card">
+      <div class="author-bar">
+        <span>Kenji (Tokyo)</span>
+        <span class="lang-hint">Original: Japanese</span>
+      </div>
+      <p>私の大好きな言語はGo言語です。シンプルで読みやすいコードが書けることと、標準ライブラリの並行処理サポートが非常に強力です。小規模なマイクロサービス構築に最適です。</p>
+    </article>
+
+    <!-- Russian Comment -->
+    <article class="comment-card">
+      <div class="author-bar">
+        <span>Dmitry (Saint Petersburg)</span>
+        <span class="lang-hint">Original: Russian</span>
+      </div>
+      <p>Я работаю с языком C++ уже более десяти лет. Он даёт полный контроль над аппаратными ресурсами и обеспечивает непревзойденную производительность в высоконагруженных вычислительных задачах.</p>
+    </article>
+
+    <!-- Code Block (Should NOT be translated) -->
+    <article class="comment-card">
+      <div class="author-bar">
+        <span>Code Sample (Should be preserved verbatim)</span>
+        <span class="lang-hint">Code block</span>
+      </div>
+      <p>Here is an example algorithm implementation:</p>
+      <pre><code>function calculateFactorial(number) {
+  if (number <= 1) return 1;
+  return number * calculateFactorial(number - 1);
+}</code></pre>
+    </article>
+  </main>
+
+  <!-- Interactive Dynamic Loading Button to Test MutationObserver -->
+  <div style="text-align: center;">
+    <button id="btn-load-more" class="btn-action">Load Dynamic Comments (Test MutationObserver)</button>
+  </div>
+
+  <script>
+    const dynamicComments = [
+      {
+        author: "Min-ho (Seoul)",
+        lang: "Korean",
+        text: "저는 코틀린(Kotlin)을 가장 좋아합니다. 자바와의 뛰어난 호환성과 null 안전성 덕분에 안드로이드 앱 개발이 훨씬 편안해졌습니다."
+      },
+      {
+        author: "Tariq (Cairo)",
+        lang: "Arabic",
+        text: "أفضل لغة بايثون للذكاء الاصطناعي، ولكن بالنسبة لتطوير الويب السريع فإن لغة جافا سكريبت لا غنى عنها على الإطلاق."
+      },
+      {
+        author: "Lorenzo (Milan)",
+        lang: "Italian",
+        text: "Ho lavorato molto con Swift per iOS. Trovo che sia un linguaggio moderno, elegante e con ottime prestazioni."
+      },
+      {
+        author: "Wei (Shanghai)",
+        lang: "Chinese",
+        text: "我目前主要使用Java进行后端微服务开发。虽然有些繁琐，但是在大规模企业级系统中的稳定性和生态支持无人能及。"
+      }
+    ];
+
+    let dynamicIndex = 0;
+    document.getElementById('btn-load-more').addEventListener('click', () => {
+      if (dynamicIndex >= dynamicComments.length) {
+        alert("All dynamic test comments have been loaded.");
+        return;
+      }
+      const data = dynamicComments[dynamicIndex++];
+      const card = document.createElement('article');
+      card.className = 'comment-card';
+      card.innerHTML = `
+        <div class="author-bar">
+          <span>${data.author}</span>
+          <span class="lang-hint">Original: ${data.lang}</span>
+        </div>
+        <p>${data.text}</p>
+      `;
+      document.getElementById('comments-container').appendChild(card);
+    });
+  </script>
+</body>
+</html>
